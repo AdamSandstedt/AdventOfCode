@@ -18,7 +18,8 @@ std::vector<std::string> split_str(std::string str, std::vector<std::string> del
         }
     }
     while(next != str.size()) {
-        rtn.push_back(str.substr(prev, next-prev));
+        if(next-prev > 0)
+            rtn.push_back(str.substr(prev, next-prev));
         prev = next + delim.at(delim_index).size();
         next = str.find(delim.at(0), prev);
         if(next == std::string::npos)
@@ -34,7 +35,8 @@ std::vector<std::string> split_str(std::string str, std::vector<std::string> del
             }
         }
     }
-    rtn.push_back(str.substr(prev));
+    if(str.size()-prev > 0)
+        rtn.push_back(str.substr(prev));
     return rtn;
 }
 
