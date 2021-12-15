@@ -15,13 +15,14 @@
 #include <unordered_set>
 #include <map>
 #include <unordered_map>
+#include <gmpxx.h>
 
 #include "split.h"
 
 using namespace std;
 
 int main() {
-  int ans = 0;
+  mpz_class ans = 0;
 
   string input;
   getline(cin, input);
