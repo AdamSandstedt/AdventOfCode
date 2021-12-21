@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <set>
+#include <boost/unordered_set.hpp>
+using boost::unordered_set;
 
 using namespace std;
 
@@ -12,7 +13,7 @@ int main() {
   string input;
   getline(cin, input);
   int y = 0;
-  set<pair<int, int> > grid;
+  unordered_set<pair<int, int> > grid;
   while(getline(cin, input)) {
     for(int x = 0; x < input.size(); x++)
       if(input[x] == '#')
@@ -22,7 +23,7 @@ int main() {
 
   int bound = 200;
   for(int iter = 1; iter <= 50; iter++) {
-    set<pair<int, int> > newGrid;
+    unordered_set<pair<int, int> > newGrid;
     for(int y0 = -bound; y0 <= bound; y0++) {
       for(int x0 = -bound; x0 <= bound; x0++) {
         int index = 0;
