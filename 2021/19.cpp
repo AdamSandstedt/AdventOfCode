@@ -12,10 +12,11 @@
 #include <deque>
 #include <list>
 #include <set>
-#include <unordered_set>
 #include <map>
 #include <unordered_map>
 #include <gmpxx.h>
+#include <boost/unordered_set.hpp>
+using boost::unordered_set;
 
 #include "split.h"
 
@@ -23,10 +24,10 @@ using namespace std;
 
 typedef mpz_class mz;
 
-void rotate(set<vector<int> > &scan, int axis) {
+void rotate(unordered_set<vector<int> > &scan, int axis) {
   int c1 = (axis+1)%3;
   int c2 = (axis+2)%3;
-  set<vector<int> > orig = scan;
+  unordered_set<vector<int> > orig = scan;
   scan.clear();
   for(auto p: orig) {
     int tmp = p[c1];
@@ -36,20 +37,26 @@ void rotate(set<vector<int> > &scan, int axis) {
   }
 }
 
-void nextRotation(set<vector<int> > &scan, int rot) {
+void nextRotation(unordered_set<vector<int> > &scan, int rot) {
   if(rot % 4 == 0) {
     rotate(scan, (rot/4+2)%3);
   }
   rotate(scan, (rot/4+1)%3);
 }
 
-vector<int> overlap(set<vector<int> > &scan0, set<vector<int> > &scan1) {
+vector<int> overlap(unordered_set<vector<int> > &scan0, unordered_set<vector<int> > &scan1) {
   for(auto p0: scan0) {
     for(auto p1: scan1) {
       int count = 0;
+      int failed = 0;
+      int max = scan0.size();
       for(auto p2: scan0) {
         if(scan1.count({p2[0]-p0[0]+p1[0],p2[1]-p0[1]+p1[1],p2[2]-p0[2]+p1[2]}))
           count++;
+        else
+          failed++;
+        if(max-failed+count < 12)
+          break;
       }
       if(count >= 12)
         return {p0[0]-p1[0],p0[1]-p1[1],p0[2]-p1[2]};
@@ -62,7 +69,7 @@ int main() {
   mz ans = 0;
 
   string input;
-  vector<set<vector<int> > > scans;
+  vector<unordered_set<vector<int> > > scans;
   while(getline(cin, input)) {
     if(input.size() == 0)
       continue;
@@ -77,6 +84,7 @@ int main() {
   vector<vector<int> > coords(scans.size(), {0,0,0});
   vector<bool> solved(scans.size(), false);
   solved[0] = true;
+  vector<vector<bool> > checked(scans.size(), vector<bool>(scans.size(), false));
   int numSolved = 1;
   while(numSolved < scans.size()) {
     for(int s0 = 0; s0 < scans.size(); s0++) {
@@ -85,6 +93,9 @@ int main() {
         bool solved1 = solved[s1];
         if(solved0 && solved1 || !solved0 && !solved1)
           continue;
+        if(checked[s0][s1])
+          continue;
+        checked[s0][s1] = true;
         for(int rot = 0; rot < 24; rot++) {
           auto v = overlap(scans[s0], scans[s1]);
           if(v[0] != 0 && v[1] != 0 && v[2] != 0) {
@@ -108,7 +119,7 @@ int main() {
     }
   }
 
-  set<vector<int> > pts;
+  unordered_set<vector<int> > pts;
   for(int s = 0; s < scans.size(); s++) {
     auto scan = scans[s];
     for(auto p: scan) {
