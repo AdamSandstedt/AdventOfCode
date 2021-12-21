@@ -1,28 +1,12 @@
 #include <iostream>
 #include <string>
-#include <sstream>
-#include <cstring>
-#include <iomanip>
-#include <cmath>
-#include <algorithm>
-#include <tuple>
 #include <vector>
-#include <queue>
-#include <stack>
-#include <deque>
-#include <list>
-#include <set>
-#include <map>
-#include <unordered_map>
-#include <gmpxx.h>
 #include <boost/unordered_set.hpp>
 using boost::unordered_set;
 
 #include "split.h"
 
 using namespace std;
-
-typedef mpz_class mz;
 
 void rotate(unordered_set<vector<int> > &scan, int axis) {
   int c1 = (axis+1)%3;
@@ -66,8 +50,6 @@ vector<int> overlap(unordered_set<vector<int> > &scan0, unordered_set<vector<int
 }
 
 int main() {
-  mz ans = 0;
-
   string input;
   vector<unordered_set<vector<int> > > scans;
   while(getline(cin, input)) {
